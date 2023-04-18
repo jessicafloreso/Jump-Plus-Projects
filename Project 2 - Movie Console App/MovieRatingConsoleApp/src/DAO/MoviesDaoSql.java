@@ -36,7 +36,6 @@ public class MoviesDaoSql implements MoviesDao{
                 allMovies.add(movie);
             }
 			rs.close();
-			pstmt.close();
 		} catch (SQLException e) {
 			System.out.println("invalid sql command");
 			e.printStackTrace();
