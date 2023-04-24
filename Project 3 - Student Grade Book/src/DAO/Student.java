@@ -12,6 +12,13 @@ public class Student {
 		this.lastName = lastName;
 		this.grade = grade;
 	}
+	
+	public Student(int id, String firstName, String lastName) {
+		super();
+		this.id = id;
+		this.firstName = firstName;
+		this.lastName = lastName;
+	}
 	public Student() {
 		super();
 		

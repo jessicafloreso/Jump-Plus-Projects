@@ -1,3 +1,6 @@
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -9,6 +12,7 @@ import DAO.ApplicationDb;
 public class StudentGradebookRunner {
 	
 	private static String teacher;
+	private static String course;
 	private static String cookiePath = "resources/cookies.txt";
 	private static ApplicationDb db;
 	private static Scanner sc;
@@ -24,7 +28,7 @@ public class StudentGradebookRunner {
 			Files.lines(Paths.get(cookiePath)).forEach(currTeacher -> {
 			    if (currTeacher != null) {
 			    	teacher = currTeacher;
-			        System.out.println("Welcome back " + teacher);
+			        System.out.println("Welcome back teacher, " + teacher);
 			    } 
 			});
 		} catch (IOException e) {
@@ -35,7 +39,7 @@ public class StudentGradebookRunner {
 	        System.out.println("Welcome, Please Login or Register for a Teacher Account!");
 	    }
 	    
-		System.out.println( db.getTeachers().getTeacherId(teacher));
+		//System.out.println( db.getTeachers().getTeacherId(teacher));
 		
 		boolean running = true;
 		while (running) {
@@ -66,10 +70,83 @@ public class StudentGradebookRunner {
 						System.out.println("Please enter valid login credentials");
 					}
 					break;
+					
+				case "logout": 
+				case "3":
+					logout();
+					break;
+					
+				case "add course":
+				case "4":
+					try {
+						int teacherId = db.getTeachers().getTeacherId(teacher);
+						course = db.getCourses().createCourse(sc, cookiePath, teacherId);
+						System.out.println(course);
+					} catch (Exception e1) {
+						System.out.println("Please enter valid login credentials");
+					}
+					break;
+					
+				case "my courses":
+				case "5":
+					try {
+						int teacherId = db.getTeachers().getTeacherId(teacher);
+						if (teacherId < 0) {
+							System.out.println("Please login...");
+							break;
+						}
+						db.getCourses().getTeacherCourses(teacherId);
+					} catch (Exception e1) {
+						System.out.println("Please enter valid login credentials");
+					}
+					break;
+					
+				case "add student":
+				case "6":
+					try {
+						int teacherId = db.getTeachers().getTeacherId(teacher);
+						if (teacherId < 0) {
+							System.out.println("Please login...");
+							break;
+						}
+						//db.getCourses().getTeacherCourses(teacherId);
+						db.getStudents().createStudent(db, sc, teacherId);
+						
+					} catch (Exception e1) {
+						System.out.println("Please enter valid login credentials");
+					}
+					break;
+				case "update grade":
+				case "7":
+					try {
+						int teacherId = db.getTeachers().getTeacherId(teacher);
+						if (teacherId < 0) {
+							System.out.println("Please login...");
+							break;
+						}
+						//db.getCourses().getTeacherCourses(teacherId);
+						db.getStudents().createStudent(db, sc, teacherId);
+						
+					} catch (Exception e1) {
+						System.out.println("Please enter valid login credentials");
+					}
+					break;
 		
 			}
 		
 		}
+	}
+	
+	public static void logout() {
+		teacher = null;
+		//TODO: ask if they would like to be remembered or not (clear cookies if not)
+		//update cookies
+		try(BufferedWriter writer = new BufferedWriter( new FileWriter(new File(cookiePath), false))) {
+			writer.write("");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		System.out.println("Logged out");
 	}
 
 }

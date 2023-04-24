@@ -38,8 +38,6 @@ public class TeacherDaoSql implements TeacherDao{
 		//Set up booleans fo the while and the success of creating a teacher to the db
 		boolean loop = true;
 		boolean success = false;
-		//set up optional returned when created 
-		Optional<Teacher> created = java.util.Optional.empty();
 		
 		while(loop) {
 			
@@ -151,6 +149,11 @@ public class TeacherDaoSql implements TeacherDao{
 
 	@Override
 	public int getTeacherId(String username) {
+		if(username == null) {
+			System.out.println("Please login to continue using our db services...");
+			return -1;
+		}
+		
 		int teacherId = -1;
 		
 		//db 

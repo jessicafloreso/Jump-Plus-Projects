@@ -11,7 +11,7 @@ public interface StudentDao {
 	//CRUD implementation needs to happen
 	
 	//CREATE
-	public Optional<Student> createStudent(Scanner sc, String cookiePath);
+	public boolean createStudent(ApplicationDb db, Scanner sc, int teacherId);
 	
 	//READ
 	public Optional<Student> getStudentById(int idArg);
@@ -22,6 +22,4 @@ public interface StudentDao {
 	
 	//DELETE
 	public boolean deleteStudent();
-	
-	public List<Student> getMoviesWithAverageRatings();
 }
