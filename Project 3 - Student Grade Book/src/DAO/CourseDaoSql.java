@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
@@ -139,29 +140,30 @@ public class CourseDaoSql implements CourseDao{
 		List<Course> courses = new ArrayList<Course>();
 		//List<Student> students = new ArrayList<Student>();
 		
-		String stmtStr = "SELECT c.subject AS course_name, AVG(s.grade) AS avg_grade, MEDIAN(s.grade) AS median_grade "
-                + "FROM course c "
-                + "JOIN student s ON c.course_id = s.course_id "
-                + "JOIN teacher t ON c.teacher_id = t.teacher_id "
-                + "WHERE t.teacher_id = ? "
-                + "GROUP BY c.subject";
-		try(PreparedStatement pstmt = conn.prepareStatement(stmtStr)) {
+		String sql = "SELECT c.course_id, c.course_subject, s.grade " +
+                "FROM teacher t " +
+                "JOIN course c ON t.teacher_id = c.teacher_id " +
+                "JOIN student s ON c.course_id = s.course_id " +
+                "WHERE t.teacher_id = ? " +
+                "ORDER BY c.course_id, s.grade";
+
+		try(PreparedStatement pstmt = conn.prepareStatement(sql)) {
 			pstmt.setInt(1, teacherId);
 			ResultSet rs = pstmt.executeQuery();
 			
-			while(rs.next()) {
-				String courseName = rs.getString("course_name");
-                double avgGrade = rs.getDouble("avg_grade");
-                double medianGrade = rs.getDouble("median_grade");
-
-                // Print the course statistics
-                System.out.println("Course: " + courseName);
-                System.out.println("Average Grade: " + avgGrade);
-                System.out.println("Median Grade: " + medianGrade);
-                System.out.println("------------");
+			int currCourseId;
+			String currSubject;
+			List<Double> grades = new ArrayList<Double>();
+			while (rs.next()) {
+				int courseId = rs.getInt("course_id");
+                String courseSubject = rs.getString("course_subject");
+                double grade = rs.getDouble("grade");
 			}
+			
+			
+			
 		}catch (SQLException e) {
-			System.out.println("User Exists Already");
+			System.out.println("SQL error @ get Teacher courses");
 		}
 		
 		
@@ -222,5 +224,24 @@ public class CourseDaoSql implements CourseDao{
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	private static double average(List<Double> grades) {
+		double sum = 0;
+		for (double grade: grades) {
+			sum += grade;
+		}
+		return sum / grades.size();
+	}
+	
+	private static double median(List<Double> grades) {
+        Collections.sort(grades);
+        int size = grades.size();
+        if (size % 2 == 0) {
+            int middle = size / 2;
+            return (grades.get(middle - 1) + grades.get(middle)) / 2;
+        } else {
+            return grades.get(size / 2);
+        }
+    }
 
 }

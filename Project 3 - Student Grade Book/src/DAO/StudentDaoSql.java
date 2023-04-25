@@ -123,9 +123,63 @@ public class StudentDaoSql implements StudentDao{
 	}
 
 	@Override
-	public boolean deleteStudent() {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean deleteStudent(ApplicationDb db, Scanner sc, int teacherId) {
+		System.out.println("------------------------------------------");
+		System.out.println("Hello Teacher,");
+		System.out.println("Let's remove a student to your course!");
+		System.out.println("------------------------------------------");
+		
+		if (teacherId == -1) {
+			System.out.println("Must login to add students to course...");
+			return false;
+		}
+		
+		String success = null;
+		boolean loop = true;
+		boolean deleted = false;
+		
+		while(loop) {
+			
+			//Ask for course name
+			System.out.println("Enter coursename: ");
+			String course = sc.nextLine();
+			int courseId = db.getCourses().getCourseId(course, teacherId);
+			
+			if (courseId == -1) {
+				System.out.println("Course does not exists, Cannnot remove student...");
+				return deleted;
+			}
+			
+			System.out.println("Enter student first name: ");
+			String fname = sc.nextLine();
+			
+			System.out.println("Enter student last name: ");
+			String lname = sc.nextLine();
+			
+			if(!studentExists(fname, lname, courseId)){
+				System.out.println("Student does not exist in course...");
+				return deleted;
+			}
+			
+	    	String stmtStr = "DELETE FROM student WHERE course_id = ? AND student_fname = ? AND student_lname = ?";
+			try(PreparedStatement pstmt = conn.prepareStatement(stmtStr)) {
+				pstmt.setInt(1, courseId);
+				pstmt.setString(2, fname);
+				pstmt.setString(3, lname);
+				int rows = pstmt.executeUpdate();
+	            if (rows > 0) {
+	                System.out.println("Student: " + fname + " "+ lname + " has been deleted successfully from " + course+".");
+	            }
+				deleted = true;
+			}catch (SQLException e) {
+				System.out.println("Student could not be deleted...");
+			}
+			
+			loop = false;
+			
+		}
+		
+		return deleted;
 	}
 
 }

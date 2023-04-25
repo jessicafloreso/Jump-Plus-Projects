@@ -21,5 +21,5 @@ public interface StudentDao {
 	public Optional<Student> updateStudent(Scanner sc, String cookiePath);
 	
 	//DELETE
-	public boolean deleteStudent();
+	public boolean deleteStudent(ApplicationDb db, Scanner sc, int teacherId);
 }
