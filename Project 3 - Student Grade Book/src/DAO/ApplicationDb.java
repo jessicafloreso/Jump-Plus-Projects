@@ -16,6 +16,8 @@ import connection.ConnectionManager;
 
 public class ApplicationDb {
 	private TeacherDaoSql teachers;
+	private CourseDaoSql courses;
+	private StudentDaoSql students;
 
 	private Connection conn;
 	
@@ -27,19 +29,19 @@ public class ApplicationDb {
 			e.printStackTrace();
 		}
 		this.teachers = new TeacherDaoSql(conn);
-//		this.movies = new MoviesDaoSql(conn);
-//		this.ratings = new RatingDaoSql(conn);
+		this.courses = new CourseDaoSql(conn);
+		this.students = new StudentDaoSql(conn);
 	}
 	
 	public TeacherDaoSql getTeachers() {
 		return teachers;
 	}
-//	
-//	public MoviesDaoSql getMovies() {
-//		return movies;
-//	}
-//	public RatingDaoSql getRatings() {
-//		return ratings;
-//	}
+	
+	public CourseDaoSql getCourses() {
+		return courses;
+	}
+	public StudentDaoSql getStudents() {
+		return students;
+	}
 
 }

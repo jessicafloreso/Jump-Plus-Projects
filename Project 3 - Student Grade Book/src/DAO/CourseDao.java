@@ -8,13 +8,13 @@ public interface CourseDao {
 	
 	//CRUD
 	//Create
-	public Optional<Course> createCourse(Scanner sc, String cookiePath, String username);
+	public String createCourse(Scanner sc, String cookiePath, int teacherId);
 	
 	
 	//Read
 	public Optional<Course> getCourseById(Scanner sc, String cookiePath);
 	public List<Course> getAllCourses(Scanner sc, String cookiePath);
-	public List<Course> getTeacherCourses(Scanner sc, String cookiePath);
+	public List<Course> getTeacherCourses(int teacherId);
 	
 	//unorganized
 	public List<Student> getStudentsInCourse(Scanner sc, String cookiePath);

@@ -5,6 +5,8 @@ public class Course {
 	private int id;
 	private int teacherId;
 	private String subject;
+	private double avg;
+	private double med;
 	
 	//course with no students
 	public Course(int id, int teacherId, String subject) {
@@ -12,6 +14,14 @@ public class Course {
 		this.id = id;
 		this.teacherId = teacherId;
 		this.subject = subject;
+	}
+	public Course(int id, int teacherId, String subject, double avg, double med) {
+		super();
+		this.id = id;
+		this.teacherId = teacherId;
+		this.subject = subject;
+		this.med = med;
+		this.avg = avg;
 	}
 	
 
